@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<h3 style="text-align: left; margin-top: 15%; color: orange; font-weight: bold;">Livros em destaque</h3>
+<p style="text-align: left; color: white; font-size: 12px">Os livros mais populares do momento</p>
+<!--SEÇÃO DO CAROUSEL-->
+<div style="background-image: transparent;" id="bookCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                {% for seek in topresults %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <div class="row justify-content-center">
+                        <div class="col-md-4" style="position: relative; overflow: hidden; height: 850px; width: 35%">
+                            <div class="card mb-4">
+                                {% if seek.volumeInfo.imageLinks and (seek.volumeInfo.imageLinks.thumbnail or seek.volumeInfo.imageLinks.smallThumbnail) %}
+                                    <img class="card-img-top" style="object-fit: cover; width: 100%; height: 100%; padding-left: 3%; padding-right: 3%; margin-top: 5%" src="{{ seek.volumeInfo.imageLinks.thumbnail or seek.volumeInfo.imageLinks.smallThumbnail }}" alt="Card image cap">
+                                {% else %}
+                                    <img class="card-img-top" style="object-fit: cover; width: 100%; height: 100%; padding-left: 3%; padding-right: 3%; margin-top: 5%" src="https://via.placeholder.com/150" alt="Imagem não disponível">
+                                {% endif %}
+                                <div class="card-body">
+                                    <hr>
+                                    <h5 class="card-title">{{ seek.volumeInfo.title }}</h5>
+                                    <br>
+                                    <p class="card-text">{{ seek.volumeInfo.authors | join(', ') }}</p>
+                                </div>
+                                {% if seek.saleInfo.buyLink %}
+                                <a href="{{ seek.saleInfo.buyLink }}">
+                                {% else %}
+                                <a href="{{ seek.volumeInfo.infoLink }}">
+                                {% endif %}
+                                    <button  style="width: 100%; padding: 7px 20px; font-size: 15px; margin-bottom: 5%" class="btn btn-primary">Comprar</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!--CONTROLES DO CAROUSEL-->
+            <a class="carousel-control-prev" style="" href="#bookCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </a>
+            <a class="carousel-control-next" style="" href="#bookCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </a>
+        </div>
+        <!--SEÇÃO DE DESTAQUES - FILMES POPULARES-->
+        <a style="text-decoration: none; color: white; font-size: 25px; marhgin" href="{{url_for('filme', propriedade='populares')}}">
+            <img style="height: 30px" src="{{url_for('static', filename='line.png')}}" alt="">
+            Filmes em destaque
+        </a>
+        <p style="text-align: left; color: orange; font-size: 12px">Os filmes mais populares do momento</p>
+        <div class="row">
+            {% for filme in filmes[:3]%}
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                  {% if filme.backdrop_path %}
+                    <img class="card-img-top" src="http://image.tmdb.org/t/p/w500{{filme.backdrop_path}}" alt="Card image cap">
+                  {% else %}
+                    <img class="card-img-top" style="width: auto;" src="https://via.placeholder.com/150" alt="Imagem não disponível">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{filme.title}}{{filme.name}}</h5>
+                    <p class="card-text">{{filme.overview | truncate(150)}}{{filme.description | truncate(150)}}</p>
+                    <p class="card-text">Data de lançamento: {{filme.release_date}}</p>
+                    <hr>
+                    <h4>Nota do público</h4><span class="badge bg-secondary">{{'%0.1f'| format(filme.vote_average|float)}}</span>
+                  </div>
+                </div>
+                <p></p>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{url_for('filme', propriedade='populares')}}" class="recommendation-link" style="text-decoration: none;">Ver mais recomendações &#x3e;</a>
+        <br><br>
+        <!--SEÇÃO DE DESTAQUES - FILMES KIDS-->
+        <a style="text-decoration: none; color: white; font-size: 25px;" href="{{url_for('filme', propriedade='kids')}}">
+            <img style="height: 30px" src="{{url_for('static', filename='line.png')}}" alt="">
+            Filmes kids em destaque
+        </a>
+        <p style="text-align: left; color: orange; font-size: 12px">Os filmes kids mais populares do momento</p>
+        <div class="row">
+            {% for filme_kids in filmeskids[:3]%}
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                  {% if filme_kids.backdrop_path %}
+                    <img class="card-img-top" src="http://image.tmdb.org/t/p/w500{{filme_kids.backdrop_path}}" alt="Card image cap">
+                  {% else %}
+                    <img class="card-img-top" style="width: auto;" src="https://via.placeholder.com/150" alt="Imagem não disponível">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{filme_kids.title}}{{filme_kids.name}}</h5>
+                    <p class="card-text">{{filme_kids.overview | truncate(150)}}{{filme_kids.description | truncate(150)}}</p>
+                    <p class="card-text">Data de lançamento: {{filme_kids.release_date}}</p>
+                    <hr>
+                    <h4>Nota do público</h4><span class="badge bg-secondary">{{'%0.1f'| format(filme_kids.vote_average|float)}}</span>
+                  </div>
+                </div>
+                <p></p>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{url_for('filme', propriedade='kids')}}" class="recommendation-link" style="text-decoration: none;">Ver mais recomendações &#x3e;</a>
+        <br><br>
+
+        <!--SEÇÃO DE DESTAQUES - SERIES POPULARES-->
+        <a style="text-decoration: none; color: white; font-size: 25px;" href="{{url_for('filme', propriedade='series')}}">
+            <img style="height: 30px" src="{{url_for('static', filename='line.png')}}" alt="">
+            Series em destaque
+        </a>
+        <p style="text-align: left; color: orange; font-size: 12px">As series mais populares do momento</p>
+        <div class="row">
+            {% for serie in series[:3]%}
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                  {% if serie.backdrop_path %}
+                    <img class="card-img-top" src="http://image.tmdb.org/t/p/w500{{serie.backdrop_path}}" alt="Card image cap">
+                  {% else %}
+                    <img class="card-img-top" style="width: auto;" src="https://via.placeholder.com/150" alt="Imagem não disponível">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{serie.title}}{{serie.name}}</h5>
+                    <p class="card-text">{{serie.overview | truncate(150)}}{{serie.description | truncate(150)}}</p>
+                    <p class="card-text">Data de lançamento: {{serie.first_air_date}}</p>
+                    <hr>
+                    <h4>Nota do público</h4><span class="badge bg-secondary">{{'%0.1f'| format(serie.vote_average|float)}}</span>
+                  </div>
+                </div>
+                <p></p>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{url_for('filme', propriedade='series')}}" class="recommendation-link" style="text-decoration: none;">Ver mais recomendações &#x3e;</a>
+        <br><br>
+
+        <!--SEÇÃO DE DESTAQUES - FILMES TERROR-->
+        <a style="text-decoration: none; color: white; font-size: 25px;" href="{{url_for('filme', propriedade='terror')}}">
+            <img style="height: 30px" src="{{url_for('static', filename='line.png')}}" alt="">
+            Filmes de terror em destaque
+        </a>
+        <p style="text-align: left; color: orange; font-size: 12px">Os filmes de terror mais populares do momento</p>
+        <div class="row">
+            {% for filme_terror in filmesterror[:3]%}
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                  {% if filme_terror.backdrop_path %}
+                    <img class="card-img-top" src="http://image.tmdb.org/t/p/w500{{filme_terror.backdrop_path}}" alt="Card image cap">
+                  {% else %}
+                    <img class="card-img-top" style="width: auto;" src="https://via.placeholder.com/150" alt="Imagem não disponível">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{filme_terror.title}}{{filme_terror.name}}</h5>
+                    <p class="card-text">{{filme_terror.overview | truncate(150)}}{{filme_terror.description | truncate(150)}}</p>
+                    <p class="card-text">Data de lançamento: {{filme_terror.release_date}}</p>
+                    <hr>
+                    <h4>Nota do público</h4><span class="badge bg-secondary">{{'%0.1f'| format(filme_terror.vote_average|float)}}</span>
+                  </div>
+                </div>
+                <p></p>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{url_for('filme', propriedade='terror')}}" class="recommendation-link" style="text-decoration: none;">Ver mais recomendações &#x3e;</a>
+        <br><br>
+
+        <!--SEÇÃO DE DESTAQUES - FILMES BREVE-->
+        <a style="text-decoration: none; color: white; font-size: 25px;" href="{{url_for('filme', propriedade='breve')}}">
+            <img style="height: 30px" src="{{url_for('static', filename='line.png')}}" alt="">
+            Lançamentos mais aguardados
+        </a>
+        <p style="text-align: left; color: orange; font-size: 12px">Os novos filmes mais aguardados</p>
+        <div class="row">
+            {% for filme_breve in filmesbreve[:3]%}
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                  {% if filme_breve.backdrop_path %}
+                    <img class="card-img-top" src="http://image.tmdb.org/t/p/w500{{filme_breve.backdrop_path}}" alt="Card image cap">
+                  {% else %}
+                    <img class="card-img-top" style="width: auto;" src="https://via.placeholder.com/150" alt="Imagem não disponível">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{filme_breve.title}}{{filme_breve.name}}</h5>
+                    <p class="card-text">{{filme_breve.overview | truncate(150)}}{{filme_breve.description | truncate(150)}}</p>
+                    <p class="card-text">Data de lançamento: {{filme_breve.release_date}}</p>
+                    <hr>
+                    <h4>Nota do público</h4><span class="badge bg-secondary">{{'%0.1f'| format(filme_breve.vote_average|float)}}</span>
+                  </div>
+                </div>
+                <p></p>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{url_for('filme', propriedade='breve')}}" class="recommendation-link" style="text-decoration: none;">Ver mais recomendações &#x3e;</a>
+        <br><br>
+    </div>
+<br>
+{% endblock conteudo %}

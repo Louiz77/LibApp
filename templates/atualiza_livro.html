@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<h2 style="text-align: center;">Atualizar Livro nos Favoritos</h2>
+<hr>
+{%- for message in get_flashed_messages() %}
+    <div class="alert alert-danger">
+        {{message}}
+    </div>
+{%- endfor %}
+<div>
+    <form action="{{url_for('atualiza_livro', id=livro.id)}}" method="POST" class="form-control">
+        <label>Nome</label>
+        <input class="form-control" type="text" name="nome" value="{{livro.nome}}"  required>
+        <label>Descrição</label>
+        <textarea class="form-control" name="descricao" required>{{livro.descricao}}</textarea>
+        <label>Sua Nota</label>
+        <input class="form-control" type="text" name="avg" value="{{livro.avg}}" required>
+        <br>
+        <button style="width: 100%; padding: 14px 40px; font-size: 20px;" class="btn btn-primary">Atualizar</button>
+    </form>
+</div>
+
+{% endblock conteudo %}

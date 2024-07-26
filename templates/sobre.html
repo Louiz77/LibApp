@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<h2 style="text-align: center; margin-top: 7%; color: orange">Caçador de livros</h2>
+<hr>
+<h6 style="text-align: center; color: white; margin-bottom: 2%"> Procure os seus livros favoritos</h6>
+    <form action="{{url_for('sobre', propriedade='search')}}" method="post">
+        <div class="form-group">
+            <input type="text" name="livro" class="form-control" required placeholder="Digite o nome do livro">
+        </div>
+        <br>
+        <button style="width: 100%; padding: 7px 20px; font-size: 15px;" class="btn btn-primary">Procurar</button>
+        <br>
+        <div class="container">
+            <ul class="list-group">
+                <li class="list-group-item">Últimas Pesquisas</li>
+                {% for registro in registros[-5:] %}
+                    <li class="list-group-item">{{ registro.livro }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </form>
+<br>
+<div class="row">
+    {% for seek in topresults %}
+    <div style="margin-top: 5%;%" class="col-md-3">
+        <div class="card" style="width: 18rem;">
+          {% if seek.volumeInfo.imageLinks and (seek.volumeInfo.imageLinks.thumbnail or seek.volumeInfo.imageLinks.smallThumbnail) %}
+            <img class="card-img-top" style="width: 190px; height: 250px; margin-left: 20%; margin-right: 5%; margin-top: 5%" src="{{ seek.volumeInfo.imageLinks.thumbnail or seek.volumeInfo.imageLinks.smallThumbnail }}" alt="Card image cap">
+          {% else %}
+            <img class="card-img-top" style="width: 190px; height: 250px; margin-left: 20%; margin-right: 5%; margin-top: 5%" src="https://via.placeholder.com/150" alt="Imagem não disponível">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ seek.volumeInfo.title }}</h5>
+            <div>
+              {% if seek.volumeInfo.description | length < 1 %}
+              <p style="padding-bottom: 25%">Não há descrição</p>
+
+              {% elif seek.volumeInfo.description | length > 120 %}
+              <p id="truncated-text">{{ seek.volumeInfo.description[:120] }}...</p>
+              <div class="collapse mb-3" id="collapse-{{ loop.index }}">
+                <p id="truncated-text-{{ loop.index }}">{{ seek.volumeInfo.description[120:] }}</p>
+            </div>
+                <div>
+                  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ loop.index }}" aria-expanded="false" aria-controls="collapse-{{ loop.index }}" data-truncated-text-id="truncated-text-{{ loop.index }}">Ler mais!</button>
+                </div>
+            </div>
+              {% else %}
+              <p>{{ seek.volumeInfo.description }}</p>
+              {% endif %}
+            <hr>
+            <p>Data de publicação: {{ seek.volumeInfo.publishedDate }}</p>
+            <p>Autor(es): {{ seek.volumeInfo.authors | join(', ') }}</p>
+            <p>Editora: {{ seek.volumeInfo.publisher }}</p>
+            <p>Categorias: {{ seek.volumeInfo.categories | join(', ') }}</p>
+            {% if seek.volumeInfo.averageRating %}
+            <h4>Avaliação Média</h4><span class="badge bg-secondary">{{ seek.volumeInfo.averageRating }}</span>
+            {% else %}
+            <h4>Avaliação Média</h4><span class="badge bg-secondary">Sem avaliação</span>
+            {% endif %}
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock conteudo %}

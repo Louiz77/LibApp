@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<h2 style="text-align: center; margin-top: 8%; color: orange">Meus Livros</h2>
+<hr>
+<h6 style="text-align: center; color: white; margin-bottom: 2%">Organize os seus livros favoritos</h6>
+<a href="{{url_for('add_livros')}}" style="width: 100%; padding: 5px 15px; font-size: 12px;" class="btn btn-secondary">Adicionar Livro</a>
+<br><br>
+<table class="table table-bordered table-hover table-striped table-dark">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Livro</th>
+          <th scope="col">Descrição</th>
+          <th scope="col">Nota Média</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+    <tbody>
+        {% for livros in bd.items %}
+        <tr>
+            <td>{{livros.id}}</td>
+            <td>{{livros.nome}}</td>
+            <td>{{livros.descricao}}</td>
+            <td>{{livros.avg}}</td>
+            <td>
+                <a style="margin-left: 25%;" href="{{livros.id}}/atualiza_livro" class="btn btn-primary btn-xs">Editar</a>
+                <a href="{{livros.id}}/remove_livro" onclick="return confirm('Deseja excluir esse livro?')" class="btn btn-danger btn-xs">Excluir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% if bd.has_prev %}
+    <a href="{{url_for('lista_livros', page=bd.prev_num)}}">Outros livros</a>
+{% else %}
+    Livros listados
+{% endif %}
+{% if bd.has_next %}
+    <a href="{{url_for('lista_livros', page=bd.next_num)}}">Proximos livros</a>
+{% else %}
+    Livros listados
+{% endif %}
+{% endblock conteudo %}

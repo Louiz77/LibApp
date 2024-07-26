@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<h2 style="text-align: center; margin-top: 8%; color: white">Diario dos filmes</h2>
+<hr>
+<div class="row">
+    {% for filme in filmes%}
+    <div class="col-md-4" style="margin-top: 3%">
+        <div class="card" style="width: 18rem;">
+          {% if filme.backdrop_path %}
+            <img class="card-img-top" src="http://image.tmdb.org/t/p/w500{{filme.backdrop_path}}" alt="Card image cap">
+          {% else %}
+            <img class="card-img-top" style="width: auto;" src="https://via.placeholder.com/150" alt="Imagem não disponível">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{filme.title}}{{filme.name}}</h5>
+            <p class="card-text">{{filme.overview}}{{filme.description}}</p>
+            <p class="card-text">Data de publicação: {{filme.release_date}}{{filme.first_air_date}}</p>
+            <hr>
+            <h4>Nota do público</h4><span class="badge bg-secondary">{{'%0.1f'| format(filme.vote_average|float)}}</span>
+          </div>
+        </div>
+        <p></p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock conteudo %}
