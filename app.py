@@ -2,6 +2,7 @@ import requests as requests
 from flask import Flask, render_template, request, redirect, url_for, flash
 import urllib.request, json
 from flask_sqlalchemy import SQLAlchemy
+import git
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flaskbd.sqlite3'
