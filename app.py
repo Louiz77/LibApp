@@ -2,7 +2,6 @@ import requests as requests
 from flask import Flask, render_template, request, redirect, url_for, flash
 import urllib.request, json
 from flask_sqlalchemy import SQLAlchemy
-import git
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flaskbd.sqlite3'
@@ -53,7 +52,7 @@ def get_dados():
 @app.route('/', methods=["GET", "POST"])
 def main():
     try:
-        livro = ("Rita Lobo")
+        livro = ("Gastronomia")
         registros.append({"livro": request.form.get("livro")})
         url = f'https://www.googleapis.com/books/v1/volumes?q={livro}'
         get_dados()
