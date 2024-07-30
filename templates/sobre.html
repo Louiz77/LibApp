@@ -14,7 +14,9 @@
             <ul class="list-group">
                 <li class="list-group-item">Últimas Pesquisas</li>
                 {% for registro in registros[-5:] %}
-                    <li class="list-group-item">{{ registro.livro }}</li>
+                    {% if registro.livro is not none %}
+                        <li class="list-group-item">{{ registro.livro }}</li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         </div>
