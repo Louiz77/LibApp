@@ -52,7 +52,7 @@ def get_dados():
 @app.route('/', methods=["GET", "POST"])
 def main():
     try:
-        livro = ("Gastronomia")
+        livro = ("Rita Lobo")
         registros.append({"livro": request.form.get("livro")})
         url = f'https://www.googleapis.com/books/v1/volumes?q={livro}'
         get_dados()
